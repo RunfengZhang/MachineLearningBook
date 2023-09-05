@@ -35,9 +35,37 @@
 
 \mainmatter
 
+\chapter{机器学习基本概念}
+
+机器学习由几个要素所组成：数据，模型和优化方法。数据提供模型优化的目标。在有监督学习中，模型总是通过优化模型实现最小化经验风险，并期望借助于模型的泛化能力实现在未观测数据上进行预测。机器学习模型包括模型的结构，以及损失函数 (Loss Function)。经验风险即为训练数据对于当前损失函数的样本均值。优化方法则提供了这样一种工具：针对当前损失函数，求得满足条件的参数配置。
+
 \chapter{机器学习中的优化方法}
 
-\section{梯度下降算法 (Gradient Descend)}
+我们可以把优化的问题简单的理解成一个“求最值”的问题。对于简单的情形，比如求$x^2+ax+b$的最小值，我们很容易能够得到这个问题的解析解$b-\frac{a^2}{4}$。但对于大多数机器学习问题，由于模型结构复杂，参数众多，甚至带有复杂的约束条件，我们很难得到解析解。此时，我们会采用一阶或者二阶优化方法，逐步逼近最优解。尤其在深度学习时代，采用更加便捷的一阶优化方法成为主流。当然这也是由于深度模型过于大和复杂导致的迫不得已的选择。
+
+\section{梯度下降方法 (Gradient Descent Method)}
+
+梯度下降算法是一个一阶优化算法，我们针对损失函数$J(\bm\theta)$，会首先将参数初始化为$\bm\theta_{0}$，之后采用迭代的方法不断更新参数$\bm\theta$。
+\begin{equation}
+  \label{grad_descent}
+  \bm\theta_{t+1} \leftarrow \bm\theta_{t} - \nabla_{\bm\theta}J(\bm\theta)
+\end{equation}
+
+\section{随机梯度下降方法 (Stochastic Gradient Descent Method)}
+梯度下降方法在每一步迭代过程中，会计算优化目标函数关于所有样本${\bm{x}_{i}}$的梯度，这会随着数据集中样本数量$n$的增长而线性增加，即计算复杂度为$\mathcal{O}(n)$。
+
+\section{Momentum}
+
+\section{Nestrov}
+
+\section{Adagrad}
+
+\section{RMSprop}
+
+\section{Adam}
+
+
+
 
 \chapter{Elegant\LaTeX{} 系列模板介绍}
 
