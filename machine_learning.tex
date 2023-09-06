@@ -60,14 +60,31 @@
 
 \section{Momentum}
 在梯度下降的基础上，引入“速度”的概念。在梯度下降时，不以当前的梯度${\bm{x}_{i}}$进行参数更新，而是以速度${\bm{m}}$进行更新:
+
 \begin{align}
   \label{momentum}
-  \bm{m} &\leftarrow \beta\bm{m} - \eta\nabla_{\bm{\theta}}{J(\bm{\theta})} \notag \\
-  \bm{\theta} &\leftarrow \bm{\theta} + \bm{m}
+  \bm{m} &\leftarrow \beta\bm{m} - \eta\nabla_{\bm{\theta}}{J(\bm{\theta})},\\
+  \bm{\theta} &\leftarrow \bm{\theta} + \bm{m}. \notag
 \end{align}
 
+书中经常举的例子是，对于一个狭长的半椭球体(elongated half-ellipsoid)损失函数，例如$f(\bm{x})=0.1x_{1}^{2}+2x_2^2$，采用Momentum优化方法会使得在较小梯度方向$\frac{\partial f(\bm{x})}{\partial x_1}$不断加速。而在较大梯度方向$\frac{\partial f(\bm{x})}{\partial x_2}$上，通过梯度间的不断抵消，避免了在$x_2$上的不必要的大梯度，且减弱了梯度震荡的影响。
+Momentum方法引入了一个新的参数$\beta$，通常令$\beta = 0.9$是一个不错的选择。
 
-\section{Nestrov}
+\section{Nesterov}
+
+Nesterov优化是基于Momentum优化的改进：对于计算梯度的选点，由当前参数$\bm{\theta}$更改为$\bm{\theta}+\beta\bm{m}$。这是因为使用Momentum方法更新参数时，当前速度$\beta\bm{m}$也会对参数进行更新，进行上述梯度修正，往往会得到一个更好的参数更新方向。
+
+\begin{align}
+  \label{nesterov}
+  \bm{m} &\leftarrow \beta\bm{m} - \eta\nabla_{\bm{\theta}}{J(\bm{\theta}+\beta\bm{m})},\\
+  \bm{\theta} &\leftarrow \bm{\theta} + \bm{m}. \notag
+\end{align}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.6\textwidth]{nesterov.jpg}
+  \caption{Nesterov优化方法相较Momentum方法具有更好的参数更新方向 \footnote{图片来源于\cite{geron2022hands}} \label{fig:nesterov}}
+\end{figure}
 
 \section{Adagrad}
 
