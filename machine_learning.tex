@@ -83,12 +83,26 @@ Nesterov优化是基于Momentum优化的改进：对于计算梯度的选点，�
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.6\textwidth]{nesterov.jpg}
-  \caption{Nesterov优化方法相较Momentum方法具有更好的参数更新方向 \footnote{图片来源于\cite{geron2022hands}} \label{fig:nesterov}}
+  \caption{Nesterov优化方法相较Momentum方法具有更好的参数更新方向 \label{fig:nesterov}}
 \end{figure}
+
+图 \ref{fig:nesterov} 形象化说明了Nesterov比Momentum在计算参数更新方向上的优势\footnote{图片来源于\cite{geron2022hands}}。
+
 
 \section{Adagrad}
 
+Adagrad 是在梯度下降的基础上的改进：对于参数在不同的维度上施加不同的decay rate。对于某些更加陡峭的维度，decay rate会相对更大，对于较为平缓的维度，decay rate会相对更小。
+
+\begin{align}
+  \label{adagrad}
+  \bm{s} &\leftarrow \beta\bm{s} + \nabla_{\bm{\theta}}{J(\bm{\theta})} \odot \nabla_{\bm{\theta}}{J(\bm{\theta})},\\
+  \bm{\theta} &\leftarrow \bm{\theta} - \eta\nabla_{\bm{\theta}}{J(\bm{\theta})} \oslash \sqrt{\bm{s} + \epsilon} . \notag
+\end{align}
+
+由\ref{adagrad}可以看出，Adagrad中用于decay梯度的$\bm{s}$会随着迭代不断累积，这导致一个问题就是AdaGrad往往会early stop到一个不是很好的解。在实际应用中，尤其是深度学习场景，不推荐使用该优化方法。
+
 \section{RMSprop}
+
 
 \section{Adam}
 
