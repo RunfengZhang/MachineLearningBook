@@ -24,6 +24,10 @@
 \colorlet{coverlinecolor}{customcolor}
 \usepackage{cprotect}
 
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{esvect}
+
 \addbibresource[location=local]{reference.bib} % 参考文献，不要删除
 
 \begin{document}
@@ -55,6 +59,13 @@
 梯度下降方法在每一步迭代过程中，会计算优化目标函数关于所有样本${\bm{x}_{i}}$的梯度，这会随着数据集中样本数量$n$的增长而线性增加，即计算复杂度为$\mathcal{O}(n)$。这导致的问题是，参数的一次迭代更新会非常耗时，且消耗大量计算资源。随机梯度下降方法则在参数迭代过程中只针对当前一个样本计算梯度$\nabla f(\bm{x}_i)$，并以此更新模型参数。在样本是随机同分布的情况下，随机梯度的期望显然等同于在全部数据集上的。
 
 \section{Momentum}
+在梯度下降的基础上，引入“速度”的概念。在梯度下降时，不以当前的梯度${\bm{x}_{i}}$进行参数更新，而是以速度${\bm{m}}$进行更新:
+\begin{align}
+  \label{momentum}
+  \bm{m} &\leftarrow \beta\bm{m} - \eta\nabla_{\bm{\theta}}{J(\bm{\theta})} \notag \\
+  \bm{\theta} &\leftarrow \bm{\theta} + \bm{m}
+\end{align}
+
 
 \section{Nestrov}
 
