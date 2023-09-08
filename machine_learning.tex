@@ -103,6 +103,7 @@ Adagrad 是在梯度下降的基础上的改进：对于参数在不同的维度
 
 \section{RMSprop}
 
+RMSprop是基于AdaGrad的改进。在AdaGrad中，计算用于平衡不同维度间下降速率的decay weight的$\bm{s}$是不断累积的，因而会blew up进而使得模型训练过早地停止。RMSprop在$\bm{s}$的更新中引入了exponential decay，从而避免产生过大的decay weight，进而缓解了stop too early的问题。
 
 \section{Adam}
 
