@@ -95,7 +95,7 @@ Adagrad 是在梯度下降的基础上的改进：对于参数在不同的维度
 
 \begin{align}
   \label{adagrad}
-  \bm{s} &\leftarrow \beta\bm{s} + \nabla_{\bm{\theta}}{J(\bm{\theta})} \odot \nabla_{\bm{\theta}}{J(\bm{\theta})},\\
+  \bm{s} &\leftarrow \bm{s} + \nabla_{\bm{\theta}}{J(\bm{\theta})} \odot \nabla_{\bm{\theta}}{J(\bm{\theta})},\\
   \bm{\theta} &\leftarrow \bm{\theta} - \eta\nabla_{\bm{\theta}}{J(\bm{\theta})} \oslash \sqrt{\bm{s} + \epsilon} . \notag
 \end{align}
 
@@ -105,7 +105,38 @@ Adagrad 是在梯度下降的基础上的改进：对于参数在不同的维度
 
 RMSprop是基于AdaGrad的改进。在AdaGrad中，计算用于平衡不同维度间下降速率的decay weight的$\bm{s}$是不断累积的，因而会blew up进而使得模型训练过早地停止。RMSprop在$\bm{s}$的更新中引入了exponential decay，从而避免产生过大的decay weight，进而缓解了stop too early的问题。
 
+\begin{align}
+  \label{rmsprop}
+  \bm{s} &\leftarrow \rho\bm{s} + (1-\rho) \nabla_{\bm{\theta}}{J(\bm{\theta})} \odot \nabla_{\bm{\theta}}{J(\bm{\theta})},\\
+  \bm{\theta} &\leftarrow \bm{\theta} - \eta\nabla_{\bm{\theta}}{J(\bm{\theta})} \oslash \sqrt{\bm{s} + \epsilon} . \notag
+\end{align}
+
+RMSprop相较之前的优化方法，多了一个参数$\rho$。这个参数不需要过多调整，我们通常将其设置为0.9。
+
 \section{Adam}
+
+Adam优化方法可以理解为RMSprop和Momentum的“合体”。RMSprop在更新参数中使用原始梯度，而Adam则使用了Momentum方法中的Velocity对参数更新：
+
+\begin{align}
+  \label{adam}
+  \bm{m} &\leftarrow \beta_1\bm{m} + (1 - \beta1) \nabla_{\bm{\theta}}{J(\bm{\theta})},\\
+  \bm{s} &\leftarrow \beta_2\bm{s} + (1 - \beta2) \nabla_{\bm{\theta}}{J(\bm{\theta})} \odot \nabla_{\bm{\theta}}{J(\bm{\theta})}, \notag \\
+  \hat{\bm{m}} &\leftarrow \frac{\bm{m}}{1 - \beta_1^t}, \notag\\
+  \hat{\bm{s}} &\leftarrow \frac{\bm{s}}{1 - \beta_2^t}, \notag\\
+  \bm{\theta} &\leftarrow \bm{\theta} - \eta\hat{\bm{m}} \oslash \sqrt{\hat{\bm{s}} + \epsilon} . \notag
+\end{align}
+
+一般我们也不用去调其中$\beta_1$和$\beta_2$这两个参数。经验来看，我们会设定$\beta_1$为0.9，$\beta_2$为0.99。我们注意到Adam里会对$\bm{m}$和$\bm{s}$进行修正，这种修正在迭代初期发挥比较大的作用。比如说，当$t=1$时，$\bm{m}=(1 - \beta_1) \nabla_{\bm{\theta}}{J(\bm{\theta})}$，这相当于我们对梯度有一个放大的效果，因此可以通过除$1-\beta_1$来进行修正。简单来说明一下分母是$1-\beta_1^t$的原因：假设$t=1,...,T$时，所有的梯度都相等且为$\nabla$，那么：
+\begin{align}
+  \label{adam_beta}
+  \bm{m} &= -(1-\beta_1)\beta_1^{T-1}\nabla - (1-\beta_1)\beta_1^{T-2} \nabla + \dots + (1-\beta_1)\nabla \\
+         &= (1 - \beta_1^T) \nabla  \notag
+\end{align}
+可以看出，我们期望的梯度$\nabla$和实际经过exponential decay后的速率$\bm{m}$正好是$1-\beta_1^T$的比例关系。
+
+\section{AdamW}
+
+AdamW是Adam和Weight Decay的结合。所谓Weight Decay是将模型的参数在每次迭代之后乘一个decay factor，比如0.99。显然，当我们用最原始的SGD时，weight decay相当于l2 regularization。但是如果优化方法是Adam时，Adam + l2-reg与 Adam + Weight Decay并不等价。Adam + l2-reg在实操中泛化能力不够理想，而 Adam + Weight Decay一般效果更佳。作者本人在对BERT等NLP模型进行FineTuning时，一般默认选择 AdamW 优化方法。
 
 
 \chapter{机器学习中的损失函数}
