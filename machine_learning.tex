@@ -263,6 +263,10 @@ AdamW是Adam和Weight Decay的结合。所谓Weight Decay是将模型的参数�
 
 \chapter{提升方法Boosting}
 
+\section{Gradient Boosting}
+
+\section{XGBoost}
+
 \chapter{推荐系统}
 
 \section{召回模型}
@@ -273,10 +277,9 @@ AdamW是Adam和Weight Decay的结合。所谓Weight Decay是将模型的参数�
 
 \subsubsection{KD-Tree 算法}
 
-\textcolor{importcolor}{\bfseries 构建（平衡）KD-Tree}：选择高维向量中的某一维（一般采用轮转的方式），按照当前结点上的数据在该维度的中位数进行划分，直到结点不包含数据点为止。
+\textcolor{importcolor}{\bfseries KD-Tree构建}：选择高维向量中的某一维（一般采用轮转的方式），将当前结点上的数据点按照这些数据点在该维度上的中位数进行划分，重复上述过程直到树的结点不包含数据点为止。
 
-
-\textcolor{importcolor}{\bfseries KD-Tree检索}：
+\textcolor{importcolor}{\bfseries KD-Tree检索}：1) 首先由树的根结点寻到目标点所在的叶子结点，并以当前叶子结点作为最近邻的候选点；2) 递归地判断当前结点的兄弟结点是否与以目标点为中心，以当前最短距离为半径的超球体相交；3）如果相交则进入兄弟结点进行搜索，搜索过程对最短距离进行实时更新；如果不相交则往父结点回退直到回退到根结点终止。
 
 
 \subsubsection{局部敏感哈希（Local Sensitive Hash）}
