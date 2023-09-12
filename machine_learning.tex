@@ -251,6 +251,41 @@ AdamW是Adam和Weight Decay的结合。所谓Weight Decay是将模型的参数�
 
 \chapter{推荐系统}
 
+
+\section{召回模型}
+
+\subsection{Embedding召回方法}
+
+\subsubsection{KD-Tree 算法}
+
+
+\subsubsection{局部敏感哈希（Local Sensitive Hash）}
+
+局部敏感哈希的思路是：两个高维空间上距离近的点，映射到低维空间中的两个投影点也相对靠近；两个高维空间上距离较远的点，映射到低维空间中的投影则可能较远也可能较近。那么，如果我们随机构建若干投影映射，如果两个点在多个投影映射下的投影点都有相近的距离，那么大概率这两个点在原始空间中也距离较近。
+
+我们可以假设有$N$个投影映射$\{(\bm{p}_1,b_1),(\bm{p}_2,b_2),\dots,(\bm{p}_N, b_N)\}$，且对应的分桶宽度为$\{w_1,w_2,\dots,w_N\}$，那么对于高维空间中的向量$\bm{x}$，落在映射$i$的分桶为：
+\begin{equation}
+  h_i(\bm{x})=
+\end{equation}
+
+
+
+\subsubsection{Hierachical Navigable Small Worlds (HNSW)}
+
+Hierachical Navigable Small Worlds 算法构建了一个分层的索引图，如\ref{fig:hnsw}所示\footnote{图片来源于Pinecone。}。位于上层的索引图较为“稀疏”，点与点之间有较大距离。越往下层，索引图越“稠密”，点与点之间的距离则更近。在搜索时，先从上层索引进行搜索，找到近似最近邻点，再跳转至下层对应的点，并重复搜索过程，直到在最底层的索引图上找到最近邻点。HNSW 算法构建索引图以及在索引图上搜索的详细过程请参见 \href{https://www.pinecone.io/learn/series/faiss/hnsw/}{Hierachical Navigable Small Worlds}。
+
+HNSW 索引是工业场景中最受欢迎的索引方法之一，尤其适合索引规模特别庞大的场景（Billion级别甚至更大），但构建该索引过程较为耗时，且会占用大量的存储空间。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.6\textwidth]{hnsw.jpg}
+  \caption{HNSW索引 \label{fig:hnsw}}
+\end{figure}
+
+
+\section{粗排与精排}
+
+
 \chapter{Learning to Rank}
 
 \chapter{自然语言处理}
