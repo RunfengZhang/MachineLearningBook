@@ -46,170 +46,30 @@
 
 机器学习由几个要素所组成：数据，模型和优化方法。数据提供模型优化的目标。在有监督学习中，模型总是通过优化模型实现最小化经验风险，并期望借助于模型的泛化能力实现在未观测数据上进行预测。机器学习模型包括模型的结构，以及损失函数 (Loss Function)。经验风险即为训练数据对于当前损失函数的样本均值。优化方法则提供了这样一种工具：针对当前损失函数，求得满足条件的参数配置。
 
-\chapter{理论机器学习基础}
+% Chapter 理论机器学习基础
+\include{theo}
 
-\begin{theorem}[PAC理论] \label{thm:pac} 
-  对于某个固定的假设检验$h$，当抽样样本量$\textcolor{blue}{N}$足够大时，抽样样本上的样本均值$E_{in}(h)$将probably close to 样本分布上期望$E_{out}(h)$。其中，
-  \begin{equation}
-    E_{in}(h) = \frac{1}{N}\sum_{n=1}^{N}{\parallel h(\bm{x}_n) \neq y_n \parallel} \notag
-  \end{equation}
-
-  \begin{equation}
-    E_{out}(h) = E_{\bm{x}\sim q}[\parallel h(\bm{x}) \neq y \parallel]. \notag
-  \end{equation}
-
-  这里，probably close是指
-  \begin{equation}
-    \mathbb{P}(|E_{in}(h) - E_{out}(h)| > \textcolor{red}{\epsilon}) \leq 2exp(-2\textcolor{red}{\epsilon}^2\textcolor{blue}{N})
-  \end{equation}
-\end{theorem}
-
+% Chapter 机器学习中的优化方法
 \include{optimization}
 
-\chapter{机器学习中的损失函数}
+% Chapter 机器学习中的损失函数
+\include{loss}
 
-\section{回归问题的损失函数}
+% Chapter 机器学习中的评估指标
+\include{metric}
 
-常见的回归问题的损失函数包括：
-\begin{itemize}
-  \item 平方损失函数 (Square Loss 或 L2-loss): $L(\hat{y}, y) = (\hat{y} - y)^2$
-  \item 绝对值损失函数 (Absolute Loss 或者 L1-loss)：$L(\hat{y}, y) = |\hat{y} - y|$
-  \item Huber损失函数：当$|\hat{y} - y|\leq\delta$，$L(\hat{y}, y)$为$(\hat{y} - y)^2$；当$|\hat{y} - y|>\delta$，$L(\hat{y}, y)$为$|\hat{y} - y|$
-\end{itemize}
-
-
-平方损失函数 (Square Loss)
-
-\section{分类问题的损失函数}
-
-\subsection{二分类问题的损失函数}
-
-最符合人类思维的二分类损失函数即为0-1 loss：
-\begin{equation}
-  L(\hat{y}, y) = \mathbb{I}[\hat{y} \neq y]
-\end{equation}
-
-\subsection{多分类问题的损失函数}
-
-\section{能否直接用线性回归用在二分类任务上}
-
-可以，效果不会特别差，但也存在一定的问题考虑margin $yf$，该value较大时，反而会贡献比较大的loss。
-
-
-\chapter{机器学习模型的评估指标}
-
-\section{分类模型的评估指标}
-
-\subsection{二分类模型}
-
-对于分类最为简单直接的评估指标就是准确率 (accuracy)，即分类正确的样本个数在样本总体中的比例。准确率是很符合人类直观感受的一个评估指标，但并非适合很多场景，例如样本不均衡的情况。推荐系统中的转化率预估模型是一个二分类模型，在训练样本中大部分样本为负样本，如果只考虑准确率则甚至可能将所有预测样本预测为负样本会得到很高的准确率。显然，准确率无法满足我们衡量模型好坏的需求。
-
-考虑到二分类任务中样本label只有正样本 (Positive) 和 负样本 (Negative) 两种，预测label亦是如此。那么对于一个样本则可能有四种情况：
-
-\begin{itemize}
-  \item True Positive (TP): label 为 Positive 且预测结果为 Positive
-  \item False Negative (FN): label 为 Positive 但预测结果为 Negative
-  \item False Positive (FP): label 为 Negative 但预测结果为 Positive
-  \item True Negative (TN): label 为 Negative 且预测结果为 Negative
-\end{itemize}
-
-藉此，我们可以定义精确率 (Precision) 和召回率 (Recall)两个指标：
-
-\begin{equation}
-  \label{precision}
-  Precision=\frac{TP}{TP+FP}
-\end{equation}
-
-\begin{equation}
-  \label{recall}
-  Recall=\frac{TP}{TP+FN}
-\end{equation}
-
-直观理解，Precision 表示判断为正样本的集合中确确实实是正样本的比例，而 Recall 则表示预测为正样本的集合覆盖所有正样本的比例。对于二分类问题，通常最后的模型输出是样本为正样本的概率$p(y=1|\bm{x})$。我们会比较$p(y=1|\bm{x})$和阈值$\alpha$的大小关系来决定最终模型预测的结果$y_{pred}$：
-\begin{equation}
-  \label{binary_pred}
-  y_{pred}=\left\{
-    \begin{aligned}
-      1, p(y=1|\bm{x})\geq \alpha \\
-      0, p(y=1|\bm{x}) < \alpha
-    \end{aligned}
-  \right.
-\end{equation}
-对于同一个模型，当我们设置较大的阈值$\alpha$时，结果Precision会增大，但同时由于相当于我们施加了更严的标准，Recall会相应降低。在实际应用中，我们往往希望模型达到一定的召回率，或者满足一定的精确度。我们在比较两个二分类模型的性能时，可以观察两个模型在相同召回下的精确率，亦或者比较相同精确率下的召回比例。如果我们希望更加全面地刻画模型的性能，我们可以不断增大阈值（从0到1），以Precision为纵轴，Recall为横轴，绘出如图\ref{fig:prcurve}的PR曲线。我们希望Precision和Recall同时取得较大值，因此PR曲线越偏向右上方则越理想。
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.6\textwidth]{prcurve.png}
-  \caption{PR曲线 \label{fig:prcurve}}
-\end{figure}
-
-
-
-
-
-\subsection{多分类模型}
-
-
-\section{回归问题的评估指标}
-
+% Chapter 树模型
 \include{tree}
 
-\chapter{提升方法Boosting}
+% Chapter 提升方法 Boosting
+\include{boosting}
 
-\section{Gradient Boosting}
-
-\section{XGBoost}
-
-\chapter{推荐系统}
-
-\section{召回模型}
-
-\subsection{协同过滤 (Collaborative Filtering)}
-
-\subsection{Embedding召回方法}
-
-\subsubsection{KD-Tree 算法}
-
-\textcolor{importcolor}{\bfseries KD-Tree构建}：选择高维向量中的某一维（一般采用轮转的方式），将当前结点上的数据点按照这些数据点在该维度上的中位数进行划分，重复上述过程直到树的结点不包含数据点为止。
-
-\textcolor{importcolor}{\bfseries KD-Tree检索}：1) 首先由树的根结点寻到目标点所在的叶子结点，并以当前叶子结点作为最近邻的候选点；2) 递归地判断当前结点的兄弟结点是否与以目标点为中心，以当前最短距离为半径的超球体相交；3）如果相交则进入兄弟结点进行搜索，搜索过程对最短距离进行实时更新；如果不相交则往父结点回退直到回退到根结点终止。
-
-\begin{note}
-  读者朋友如果希望通过例子来更加直观理解KD-Tree的检索过程，可以参考\href{https://zhuanlan.zhihu.com/p/23966698}{KD树算法之详细篇}。KD-Tree检索K近邻与检索最近邻类似，只需在检索过程中维护一个存储当前K近邻的list或者大顶堆即可。
-\end{note}
-
-\subsubsection{局部敏感哈希（Local Sensitive Hash）}
-
-局部敏感哈希的基本思路是：两个高维空间上距离近的点，映射到低维空间中的两个投影点也相对靠近；两个高维空间上距离较远的点，映射到低维空间中的投影则可能较远也可能较近。那么，如果我们随机构建若干投影映射，如果两个点在多个投影映射下的投影点都有相近的距离，那么大概率这两个点在原始空间中也距离较近。
-
-我们可以假设有$N$个投影映射$\{(\bm{p}_1,b_1),(\bm{p}_2,b_2),\dots,(\bm{p}_N, b_N)\}$，且对应的分桶宽度为$\{w_1,w_2,\dots,w_N\}$，那么对于高维空间中的向量$\bm{x}$，落在映射$i$的分桶为：
-\begin{equation}
-  h_i(\bm{x})= \lfloor \frac{\bm{p}_i^T + b_i}{w_i} \rfloor
-\end{equation}
-其中，$h_i(\bm{x})\in \mathbb{Z}$为分桶标号。对于高维空间中的两个点$\bm{x}_1,\bm{x}_2$，如果各自的分桶标号$(h_1(\bm{x}_1), h_2(\bm{x}_1),\dots,h_N(\bm{x}_1))$和$(h_1(\bm{x}_2), h_2(\bm{x}_2),\dots,h_N(\bm{x}_2))$在大多数维度上重合，则$\bm{x}_1,\bm{x}_2$在原始空间中相近。
-
-\begin{note}
-  关于局部敏感哈希的详细介绍，可以参见Pinecore的\href{https://www.pinecone.io/learn/series/faiss/locality-sensitive-hashing/}{Locality Sensitive Hashing: The Illustrated Guide}。
-\end{note}
-
-\subsubsection{Hierachical Navigable Small Worlds (HNSW)}
-
-HNSW 算法构建了一个分层的索引图，如图\ref{fig:hnsw}所示\footnote{图片来源于Pinecone。}。位于上层的索引图较为“稀疏”，点与点之间有较大距离。越往下层，索引图越“稠密”，点与点之间的距离则更近。在搜索时，先从上层索引进行搜索，找到近似最近邻点，再跳转至下层对应的点，并重复搜索过程，直到在最底层的索引图上找到最近邻点。HNSW 算法构建索引图以及在索引图上搜索的详细过程请参见 \href{https://www.pinecone.io/learn/series/faiss/hnsw/}{Hierachical Navigable Small Worlds}。
-
-HNSW 索引是工业场景中最受欢迎的索引方法之一，尤其适合索引规模特别庞大的场景（Billion级别甚至更大），但构建该索引过程较为耗时，且会占用大量的存储空间。
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.6\textwidth]{hnsw.jpg}
-  \caption{HNSW检索最近邻过程 \label{fig:hnsw}}
-\end{figure}
-
-
-\section{粗排与精排}
-
+% Chapter 推荐系统
+\include{rec_sys}
 
 \chapter{Learning to Rank}
 
+% Chapter 自然语言处理
 \include{nlp}
 
 \chapter{Elegant\LaTeX{} 系列模板介绍}

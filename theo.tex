@@ -1,0 +1,17 @@
+\chapter{理论机器学习基础}
+
+\begin{theorem}[PAC理论] \label{thm:pac} 
+  对于某个固定的假设检验$h$，当抽样样本量$\textcolor{blue}{N}$足够大时，抽样样本上的样本均值$E_{in}(h)$将probably close to 样本分布上期望$E_{out}(h)$。其中，
+  \begin{equation}
+    E_{in}(h) = \frac{1}{N}\sum_{n=1}^{N}{\parallel h(\bm{x}_n) \neq y_n \parallel} \notag
+  \end{equation}
+
+  \begin{equation}
+    E_{out}(h) = E_{\bm{x}\sim q}[\parallel h(\bm{x}) \neq y \parallel]. \notag
+  \end{equation}
+
+  这里，probably close是指
+  \begin{equation}
+    \mathbb{P}(|E_{in}(h) - E_{out}(h)| > \textcolor{red}{\epsilon}) \leq 2exp(-2\textcolor{red}{\epsilon}^2\textcolor{blue}{N})
+  \end{equation}
+\end{theorem}

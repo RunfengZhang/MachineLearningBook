@@ -1,0 +1,28 @@
+\chapter{机器学习中的损失函数}
+
+\section{回归问题的损失函数}
+
+常见的回归问题的损失函数包括：
+\begin{itemize}
+  \item 平方损失函数 (Square Loss 或 L2-loss): $L(\hat{y}, y) = (\hat{y} - y)^2$
+  \item 绝对值损失函数 (Absolute Loss 或者 L1-loss)：$L(\hat{y}, y) = |\hat{y} - y|$
+  \item Huber损失函数：当$|\hat{y} - y|\leq\delta$，$L(\hat{y}, y)$为$(\hat{y} - y)^2$；当$|\hat{y} - y|>\delta$，$L(\hat{y}, y)$为$|\hat{y} - y|$
+\end{itemize}
+
+
+平方损失函数 (Square Loss)
+
+\section{分类问题的损失函数}
+
+\subsection{二分类问题的损失函数}
+
+最符合人类思维的二分类损失函数即为0-1 loss：
+\begin{equation}
+  L(\hat{y}, y) = \mathbb{I}[\hat{y} \neq y]
+\end{equation}
+
+\subsection{多分类问题的损失函数}
+
+\section{能否直接用线性回归用在二分类任务上}
+
+可以，效果不会特别差，但也存在一定的问题考虑margin $yf$，该value较大时，反而会贡献比较大的loss。
