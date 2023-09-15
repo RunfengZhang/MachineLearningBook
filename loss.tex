@@ -4,13 +4,17 @@
 
 常见的回归问题的损失函数包括：
 \begin{itemize}
-  \item 平方损失函数 (Square Loss 或 L2-loss): $L(\hat{y}, y) = (\hat{y} - y)^2$
-  \item 绝对值损失函数 (Absolute Loss 或者 L1-loss)：$L(\hat{y}, y) = |\hat{y} - y|$
+  \item 平方损失函数 (square loss 或 l2-loss): $L(\hat{y}, y) = (\hat{y} - y)^2$
+  \item 绝对值损失函数 (absolute loss 或者 l1-loss)：$L(\hat{y}, y) = |\hat{y} - y|$
   \item Huber损失函数：当$|\hat{y} - y|\leq\delta$，$L(\hat{y}, y)$为$(\hat{y} - y)^2$；当$|\hat{y} - y|>\delta$，$L(\hat{y}, y)$为$|\hat{y} - y|$
 \end{itemize}
 
-
-平方损失函数 (Square Loss)
+平方损失函数 (square loss)最常见且具有光滑可导、凸性等优点，便于使用各种优化器。但平方损失函数的缺点在于，它对异常点 (outliers) 敏感。这里，敏感指的是由于平方损失函数的形式，异常点会最终“贡献”较大的损失值，从而导致模型在训练过程中过于受异常点的影响。我们可以以最大似然的角度解释平方损失函数：对于样本点$\bm{x}_i$，样本标签$y_i$的噪声$\epsilon^{(i)}$独立同分布，且服从于均值为0，标准差为$\delta$的高斯分布$\mathcal{N}(0,\delta)$。那么在整个训练集上的似然为：
+\begin{equation}
+  \begin{aligned}
+    L(\bm{\theta}) &= \prod_{i=1}^{n}{p(y_i|\bm{x}_i;\bm{\theta})}
+  \end{aligned}
+\end{equation}
 
 \section{分类问题的损失函数}
 
