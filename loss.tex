@@ -1,5 +1,11 @@
 \chapter{机器学习中的损失函数}
 
+\begin{introduction}
+  \item regression loss
+  \item binary classification loss
+  \item multi-class classification loss
+  \end{introduction}
+
 \section{回归问题的损失函数}
 
 常见的回归问题的损失函数包括：
@@ -9,12 +15,31 @@
   \item Huber损失函数：当$|\hat{y} - y|\leq\delta$，$L(\hat{y}, y)$为$(\hat{y} - y)^2$；当$|\hat{y} - y|>\delta$，$L(\hat{y}, y)$为$|\hat{y} - y|$
 \end{itemize}
 
-平方损失函数 (square loss)最常见且具有光滑可导、凸性等优点，便于使用各种优化器。但平方损失函数的缺点在于，它对异常点 (outliers) 敏感。这里，敏感指的是由于平方损失函数的形式，异常点会最终“贡献”较大的损失值，从而导致模型在训练过程中过于受异常点的影响。我们可以以最大似然的角度解释平方损失函数：对于样本点$\bm{x}_i$，样本标签$y_i$的噪声$\epsilon^{(i)}$独立同分布，且服从于均值为0，标准差为$\delta$的高斯分布$\mathcal{N}(0,\delta)$。那么在整个训练集上的似然为：
+平方损失函数 (square loss)在处理回归问题时最常见，且其具有光滑可导、凸性等优点。但平方损失函数的缺点在于，它对异常点 (outliers) 敏感。这里，敏感指的是由于平方损失函数的形式，异常点会最终“贡献”较大的损失值，从而导致模型在训练过程中过于受异常点的影响。我们可以以最大似然的角度解释平方损失函数：对于样本点$\bm{x}_i$，样本标签$y_i$的噪声$\epsilon^{(i)}$独立同分布，且服从于均值为0，标准差为$\delta$的高斯分布$\mathcal{N}(0,\delta)$。那么在整个训练集上的似然为：
 \begin{equation}
   \begin{aligned}
-    L(\bm{\theta}) &= \prod_{i=1}^{n}{p(y_i|\bm{x}_i;\bm{\theta})}
+    L(\bm{\theta}) &= \prod_{i=1}^{n}{p(y^{(i)}|\bm{x}^{(i)};\bm{\theta})}
   \end{aligned}
 \end{equation}
+
+绝对值损失函数 (absolute loss) 相对平方损失函数对异常点较不敏感。但该损失函数在$y=0$时不可导，且当$\hat{y}$非常接近$y$时，$|\frac{\partial L}{\partial \hat{y}}|=1$，导致优化过程中当参数接近极值点时可能发生震荡，此时的优化收敛性相较于使用平方损失函数时差。绝对值损失函数也可以从最大似然角度解释，只不过样本标签的噪声满足Laplace分布：
+
+\begin{definition}[Laplace分布] \label{def:laplace} 
+  一元维度上的Laplace分布密度函数为：
+  \begin{equation}
+    Lap(x|\mu, b) = \frac{1}{2b}\exp\left(-\frac{|x-u|}{b}\right)
+  \end{equation}
+  基于此定义的Laplace分布的均值为$\mu$，方差为$2b^2$
+\end{definition}
+
+Huber损失函数可以看作平方损失函数和绝对值损失函数的结合，对异常点没有平方损失函数那样敏感，损失函数光滑可导，并且在靠近极值点时具有平方损失函数的性质。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.6\textwidth]{regression_loss.jpg}
+  \caption{平方损失函数 / 绝对值损失函数 / Huber损失函数 对比 \label{fig:regression_loss}}
+\end{figure}
+
 
 \section{分类问题的损失函数}
 
