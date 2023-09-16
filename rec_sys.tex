@@ -1,5 +1,16 @@
 \chapter{推荐系统}
 
+\begin{introduction}
+  \item 协同过滤
+  \item 矩阵分解
+  \item 图卷积神经网络
+  \item BPR
+  \item 因子分解机
+  \item DeepFM
+  \item A/B Test
+  \item Interleving
+  \end{introduction}
+
 \section{召回模型}
 
 \subsection{协同过滤 (Collaborative Filtering)}
@@ -43,4 +54,21 @@ HNSW 索引是工业场景中最受欢迎的索引方法之一，尤其适合索
 \end{figure}
 
 
-\section{粗排与精排}
+\section{精排模型}
+
+召回模型从海量的数据中捞出一批候选集合，而精排模型则在召回的集合中“精挑细选”，将候选集合中的对象打分排序。相对与召回模型，精排模型要求更加精确，它往往会利用更多的特征或者采用更加复杂的模型结构，藉此来充分挖掘数据之间的关联性。简而言之，召回模型需要尽量做到不遗漏，精排模型力求更加精准。
+
+\subsection{因子分解机 (Factorization Machine)}
+
+
+
+
+
+\subsection{DeepFM}
+
+
+\section{线上实验评估方法}
+
+\subsection{A/B Test}
+
+\subsection{Interleving}
