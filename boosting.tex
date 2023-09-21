@@ -2,9 +2,24 @@
 
 \section{Forward Stagewise Additive Modeling}
 
-\subsection{Additive Modeling}
+我们可以将Additive Modeling理解成为一组基函数${b(\bm{x};\gamma_m)}$的线性组合 (basis function expansion)：
+\begin{equation}
+    f(\bm{x})=\sum_{m=1}^{M}{\beta_m b(\bm{x};\gamma_m)}
+\end{equation}
+其中，$\beta_m \in \mathcal{R}$是线性组合的系数，$\left\{b(\bm{x};\gamma_m)\right\}$为hypothesis space中的基函数，$\gamma_m$为刻画基函数的参数。这里，线性组合$f(x)$可以用于回归任务，亦可通过拟合logits来用于分类任务（后面将结合具体的例子理解）。
 
-\subsection{Forward Stagewise for Additive Modeling}
+基于上述的Additive Modeling的形式，机器学习的优化目标为：
+
+\begin{equation}
+    \min_{\left\{\beta_m, \gamma_m\right\}_1^M} \sum_{i=1}^{N}{L\left(y_i, \sum_{m=1}^{M}{\beta_m b(\bm{x}_i; \gamma_m)}\right)}
+\end{equation}
+
+但是遗憾的是该问题是NP-Hard问题，我们很难直接针对该additive model进行优化。这里就引入了Forward Stagewise的概念，即假设当前已拟合的函数为$f_{m-1}(\bm{x})$，那么我们通过优化
+\begin{equation}
+    \min_{\left\{\beta, \gamma\right\}} \sum_{i=1}^{N}{L\left(y_i, f_{m-1}(\bm{x}_i) + \beta b(\bm{x}_i; \gamma)\right)}
+\end{equation}
+来进一步提升模型的performance。
+
 
 \section{Gradient Boosting}
 
