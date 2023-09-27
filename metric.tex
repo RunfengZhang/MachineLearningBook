@@ -9,10 +9,10 @@
 考虑到二分类任务中样本label只有正样本 (Positive) 和 负样本 (Negative) 两种，预测label亦是如此。那么对于一个样本则可能有四种情况：
 
 \begin{itemize}
-  \item True Positive (TP): label 为 Positive 且预测结果为 Positive
-  \item False Negative (FN): label 为 Positive 但预测结果为 Negative
-  \item False Positive (FP): label 为 Negative 但预测结果为 Positive
-  \item True Negative (TN): label 为 Negative 且预测结果为 Negative
+  \item True Positive (TP): label 为 $+1$ 且预测结果为 $+1$
+  \item False Negative (FN): label 为 $+1$ 但预测结果为 $-1$
+  \item False Positive (FP): label 为 $-1$ 但预测结果为 $+1$
+  \item True Negative (TN): label 为 $-1$ 且预测结果为 $-1$
 \end{itemize}
 
 藉此，我们可以定义精确率 (Precision) 和召回率 (Recall)两个指标：
